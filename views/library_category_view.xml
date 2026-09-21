@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vue formulaire -->
+        <record id="view_library_category_form" model="ir.ui.view">
+            <field name="name">library.category.form</field>
+            <field name="model">library.category</field>
+            <field name="arch" type="xml">
+                <form string="Catégorie">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="book_count"/>
+                        </group>
+                        <group string="Description">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue liste -->
+        <record id="view_library_category_tree" model="ir.ui.view">
+            <field name="name">library.category.tree</field>
+            <field name="model">library.category</field>
+            <field name="arch" type="xml">
+                <tree string="Catégories">
+                    <field name="name"/>
+                    <field name="book_count"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue recherche -->
+        <record id="view_library_category_search" model="ir.ui.view">
+            <field name="name">library.category.search</field>
+            <field name="model">library.category</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_library_category" model="ir.actions.act_window">
+            <field name="name">Catégories</field>
+            <field name="res_model">library.category</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

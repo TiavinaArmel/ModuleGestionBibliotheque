@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ============================================ -->
+        <!-- VUE FORMULAIRE LIVRE                         -->
+        <!-- ============================================ -->
+        <record id="view_library_book_form" model="ir.ui.view">
+            <field name="name">library.book.form</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <form string="Livre">
+                    <!--
+                        <header> : barre d'actions EN HAUT du formulaire.
+                        Elle contient les boutons et la barre d'état (statusbar).
+                        Elle doit être HORS du <sheet>.
+                    -->
+                    <header>
+                        <!--
+                            Bouton "Publier" : visible seulement si state='draft'.
+                            states="draft" est un filtre d'affichage (pas une sécurité).
+                        -->
+                        <button name="action_publish"
+                                type="object"
+                                string="Publier"
+                                class="oe_highlight"
+                                states="draft"/>
+                        <button name="action_borrow"
+                                type="object"
+                                string="Emprunter"
+                                states="published"/>
+                        <button name="action_return"
+                                type="object"
+                                string="Retourner"
+                                states="borrowed"/>
+                        <button name="action_draft"
+                                type="object"
+                                string="Remettre en brouillon"
+                                states="published,borrowed"/>
+                        <!--
+                            widget="statusbar" : affiche l'état sous forme de
+                            barre de progression cliquable.
+                        -->
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="isbn"/>
+                                <field name="author_id"/>
+                                <field name="category_id"/>
+                            </group>
+                            <group>
+                                <field name="pages"/>
+                                <field name="publication_date"/>
+                                <field name="available"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- VUE LISTE (TREE) LIVRE                       -->
+        <!-- ============================================ -->
+        <record id="view_library_book_tree" model="ir.ui.view">
+            <field name="name">library.book.tree</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <tree string="Livres"
+                      decoration-muted="state == 'draft'"
+                      decoration-success="state == 'published'"
+                      decoration-warning="state == 'borrowed'">
+                    <field name="name"/>
+                    <field name="author_id"/>
+                    <field name="category_id"/>
+                    <field name="pages"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- VUE RECHERCHE LIVRE                          -->
+        <!-- ============================================ -->
+        <record id="view_library_book_search" model="ir.ui.view">
+            <field name="name">library.book.search</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="author_id"/>
+                    <filter name="filter_draft" string="Brouillons"
+                            domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_published" string="Publiés"
+                            domain="[('state', '=', 'published')]"/>
+                    <filter name="filter_available" string="Disponibles"
+                            domain="[('available', '=', True)]"/>
+                    <group expand="0" string="Grouper par">
+                        <filter name="group_by_state" string="État"
+                                context="{'group_by': 'state'}"/>
+                        <filter name="group_by_author" string="Auteur"
+                                context="{'group_by': 'author_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- ACTION                                       -->
+        <!-- ============================================ -->
+        <record id="action_library_book" model="ir.actions.act_window">
+            <field name="name">Livres</field>
+            <field name="res_model">library.book</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

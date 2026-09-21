@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ============================================ -->
+        <!-- VUE FORMULAIRE AUTEUR                        -->
+        <!-- ============================================ -->
+        <record id="view_library_author_form" model="ir.ui.view">
+            <field name="name">library.author.form</field>
+            <field name="model">library.author</field>
+            <field name="arch" type="xml">
+                <form string="Auteur">
+                    <sheet>
+                        <!--
+                            <group> imbriqué dans <group> : crée 2 colonnes.
+                            Le premier <group> à gauche, le second à droite.
+                        -->
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="nationality"/>
+                                <field name="birth_date"/>
+                            </group>
+                            <group>
+                                <field name="book_count"/>
+                            </group>
+                        </group>
+                        <group string="Biographie">
+                            <field name="biography" nolabel="1"/>
+                        </group>
+                        <!--
+                            <notebook> crée des onglets.
+                            <page> est une page d'onglet.
+                        -->
+                        <notebook>
+                            <page string="Livres écrits">
+                                <field name="book_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="publication_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- VUE LISTE (TREE) AUTEUR                      -->
+        <!-- ============================================ -->
+        <record id="view_library_author_tree" model="ir.ui.view">
+            <field name="name">library.author.tree</field>
+            <field name="model">library.author</field>
+            <field name="arch" type="xml">
+                <tree string="Auteurs">
+                    <field name="name"/>
+                    <field name="nationality"/>
+                    <field name="book_count"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- VUE RECHERCHE AUTEUR                         -->
+        <!-- ============================================ -->
+        <record id="view_library_author_search" model="ir.ui.view">
+            <field name="name">library.author.search</field>
+            <field name="model">library.author</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="nationality"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- ACTION                                       -->
+        <!-- ============================================ -->
+        <record id="action_library_author" model="ir.actions.act_window">
+            <field name="name">Auteurs</field>
+            <field name="res_model">library.author</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>
