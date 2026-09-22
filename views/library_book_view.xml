@@ -10,51 +10,36 @@
             <field name="model">library.book</field>
             <field name="arch" type="xml">
                 <form string="Livre">
-                    <!--
-                        <header> : barre d'actions EN HAUT du formulaire.
-                        Elle contient les boutons et la barre d'état (statusbar).
-                        Elle doit être HORS du <sheet>.
-                    -->
+
+                    <!-- Barre de boutons + état -->
                     <header>
-                        <!--
-                            Bouton "Publier" : visible seulement si state='draft'.
-                            states="draft" est un filtre d'affichage (pas une sécurité).
-                        -->
-                        <button name="action_publish"
-                                type="object"
-                                string="Publier"
-                                class="oe_highlight"
-                                states="draft"/>
-                        <button name="action_borrow"
-                                type="object"
-                                string="Emprunter"
-                                states="published"/>
-                        <button name="action_return"
-                                type="object"
-                                string="Retourner"
-                                states="borrowed"/>
-                        <button name="action_draft"
-                                type="object"
-                                string="Remettre en brouillon"
-                                states="published,borrowed"/>
-                        <!--
-                            widget="statusbar" : affiche l'état sous forme de
-                            barre de progression cliquable.
-                        -->
-                        <field name="state" widget="statusbar"/>
+                        <button name="action_publish" type="object"
+                            string="Publier" class="oe_highlight"
+                            states="draft" />
+                        <button name="action_borrow" type="object"
+                            string="Emprunter"
+                            states="published" />
+                        <button name="action_return" type="object"
+                            string="Retourner"
+                            states="borrowed" />
+                        <button name="action_draft" type="object"
+                            string="Remettre en brouillon"
+                            states="published,borrowed" />
+                        <field name="state" widget="statusbar" />
                     </header>
+
                     <sheet>
                         <group>
                             <group>
-                                <field name="name"/>
-                                <field name="isbn"/>
-                                <field name="author_id"/>
-                                <field name="category_id"/>
+                                <field name="name" />
+                                <field name="isbn" />
+                                <field name="author_id" />
+                                <field name="category_id" />
                             </group>
                             <group>
-                                <field name="pages"/>
-                                <field name="publication_date"/>
-                                <field name="available"/>
+                                <field name="pages" />
+                                <field name="publication_date" />
+                                <field name="available" />
                             </group>
                         </group>
                     </sheet>
@@ -70,18 +55,82 @@
             <field name="model">library.book</field>
             <field name="arch" type="xml">
                 <tree string="Livres"
-                      decoration-muted="state == 'draft'"
-                      decoration-success="state == 'published'"
-                      decoration-warning="state == 'borrowed'">
-                    <field name="name"/>
-                    <field name="author_id"/>
-                    <field name="category_id"/>
-                    <field name="pages"/>
-                    <field name="state"/>
+                    decoration-muted="state == 'draft'"
+                    decoration-success="state == 'published'"
+                    decoration-warning="state == 'borrowed'">
+                    <field name="name" />
+                    <field name="author_id" />
+                    <field name="category_id" />
+                    <field name="pages" />
+                    <field name="state" />
                 </tree>
             </field>
         </record>
 
+        <!-- ============================================ -->
+        <!-- VUE KANBAN LIVRE                             -->
+        <!-- ============================================ -->
+        <record id="view_library_book_kanban" model="ir.ui.view">
+            <field name="name">library.book.kanban</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <!-- Champs utilisés dans le template -->
+                    <field name="name" />
+                    <field name="author_id" />
+                    <field name="category_id" />
+                    <field name="pages" />
+                    <field name="state" />
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click library_book_kanban_card">
+                                <div class="oe_kanban_details">
+
+                                    <!-- Titre du livre -->
+                                    <div class="library_book_kanban_title">
+                                        <field name="name" />
+                                    </div>
+
+                                    <!-- Auteur -->
+                                    <div class="library_book_kanban_line">
+                                        <span class="library_book_kanban_label">Auteur :</span>
+                                        <span class="library_book_kanban_value">
+                                            <field name="author_id" />
+                                        </span>
+                                    </div>
+
+                                    <!-- Catégorie -->
+                                    <div class="library_book_kanban_line">
+                                        <span class="library_book_kanban_label">Catégorie :</span>
+                                        <span class="library_book_kanban_value">
+                                            <field name="category_id" />
+                                        </span>
+                                    </div>
+
+                                    <!-- Pages -->
+                                    <div class="library_book_kanban_line">
+                                        <span class="library_book_kanban_label">Pages :</span>
+                                        <span class="library_book_kanban_value">
+                                            <field name="pages" />
+                                        </span>
+                                    </div>
+
+                                    <!-- État -->
+                                    <div class="library_book_kanban_line">
+                                        <span class="library_book_kanban_label">État :</span>
+                                        <span class="library_book_kanban_value">
+                                            <field name="state" />
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
         <!-- ============================================ -->
         <!-- VUE RECHERCHE LIVRE                          -->
         <!-- ============================================ -->
@@ -90,19 +139,37 @@
             <field name="model">library.book</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="name"/>
-                    <field name="author_id"/>
+                    <!-- -->
+                    <field name="name" />
+                    <field name="author_id" />
+                    <!-- les filtres -->
+                    <!-- filtre selon l'états du libre -->
+                    <!-- afficher seulemetn les livres en broullions -->
                     <filter name="filter_draft" string="Brouillons"
-                            domain="[('state', '=', 'draft')]"/>
+                        domain="[('state', '=', 'draft')]" />
+                    <!-- afficher seulement les livres qui son publiés -->
                     <filter name="filter_published" string="Publiés"
-                            domain="[('state', '=', 'published')]"/>
+                        domain="[('state', '=', 'published')]" />
+                    <!-- afficher seulement les livres qui son empruntés -->
+                    <filter name="filter_borrowed" string="Empruntés"
+                        domain="[('state', '=', 'borrowed')]" />
+                    <!-- afficher seulement les livres qui sont disponibles -->
                     <filter name="filter_available" string="Disponibles"
-                            domain="[('available', '=', True)]"/>
+                        domain="[('available', '=', True)]" />
+
+                    <!-- REGROUPEMENT   -->
+
                     <group expand="0" string="Grouper par">
+                        <!-- Grouper les données  selon leur était chacun (disponible, emprunté,
+                        etc.) -->
                         <filter name="group_by_state" string="État"
-                                context="{'group_by': 'state'}"/>
+                            context="{'group_by': 'state'}" />
+                        <!-- Grouper les données  selon leur auteur -->
                         <filter name="group_by_author" string="Auteur"
-                                context="{'group_by': 'author_id'}"/>
+                            context="{'group_by': 'author_id'}" />
+                        <!-- Grouper les données  selon leur catégorie -->
+                        <filter name="group_by_category" string="Catégorie"
+                            context="{'group_by': 'category_id'}" />
                     </group>
                 </search>
             </field>
@@ -114,7 +181,7 @@
         <record id="action_library_book" model="ir.actions.act_window">
             <field name="name">Livres</field>
             <field name="res_model">library.book</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,kanban,form</field>
         </record>
 
     </data>
