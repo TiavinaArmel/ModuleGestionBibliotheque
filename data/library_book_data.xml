@@ -6,7 +6,7 @@
         <!-- ============================================ -->
         <!-- LIVRES (les livre sont placer dernièrement) 
          une livre doit avoir des champs : 
-         nom, isbn, auteur, catégorie,  nombre de pages, date de publication, état -->
+nom, isbn, auteur, catégorie,  nombre de pages, date de publication, état -->
         <!-- ============================================ -->
 
         <record id="book_les_miserables" model="library.book">
@@ -28,6 +28,214 @@
             <field name="publication_date">1949-06-08</field>
             <field name="state">published</field>
         </record>
+        <!-- ============================================ -->
+<!-- LIVRE 1 : Au-delà des rizières               -->
+<!-- ============================================ -->
+<record id="book_au_dela_des_rieres" model="library.book">
+    <field name="name">Au-delà des rizières</field>
+    <field name="isbn">978-2-84280-199-1</field>
+    <field name="author_id" ref="author_naivoharisoa_patrick_ramamonjisoa"/>
+    <field name="category_id" ref="category_roman_historique"/>
+    <field name="pages">350</field>
+    <field name="publication_date">2012-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 2 : Nour, 1947                         -->
+<!-- ============================================ -->
+<record id="book_nour_1947" model="library.book">
+    <field name="name">Nour, 1947</field>
+    <field name="isbn">978-2-84261-248-1</field>
+    <field name="author_id" ref="author_jean_luc_raharimanana"/>
+    <field name="category_id" ref="category_roman_historique"/>
+    <field name="pages">211</field>
+    <field name="publication_date">2001-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 3 : Revenir                            -->
+<!-- ============================================ -->
+<record id="book_revenir" model="library.book">
+    <field name="name">Revenir</field>
+    <field name="isbn">978-2-7436-4337-9</field>
+    <field name="author_id" ref="author_jean_luc_raharimanana"/>
+    <field name="category_id" ref="category_roman_contemporain"/>
+    <field name="pages">379</field>
+    <field name="publication_date">2018-03-07</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 4 : Presque-Songes                     -->
+<!-- ============================================ -->
+<record id="book_presque_songes" model="library.book">
+    <field name="name">Presque-Songes</field>
+    <field name="isbn">978-2-84280-119-9</field>
+    <field name="author_id" ref="author_jean_joseph_rabearivelo"/>
+    <field name="category_id" ref="category_poesie"/>
+    <field name="pages">127</field>
+    <field name="publication_date">2006-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 5 : Traduit de la nuit                 -->
+<!-- ============================================ -->
+<record id="book_traduit_de_la_nuit" model="library.book">
+    <field name="name">Traduit de la nuit</field>
+    <field name="isbn">978-2-84280-125-0</field>
+    <field name="author_id" ref="author_jean_joseph_rabearivelo"/>
+    <field name="category_id" ref="category_poesie"/>
+    <field name="pages">75</field>
+    <field name="publication_date">2007-06-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 6 : Le bain des reliques                -->
+<!-- ============================================ -->
+<record id="book_le_bain_des_reliques" model="library.book">
+    <field name="name">Le bain des reliques</field>
+    <field name="isbn">978-2-86537-218-8</field>
+    <field name="author_id" ref="author_michele_rakotoson"/>
+    <field name="category_id" ref="category_roman"/>
+    <field name="pages">146</field>
+    <field name="publication_date">1988-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 7 : Lalana                             -->
+<!-- ============================================ -->
+<record id="book_lalana" model="library.book">
+    <field name="name">Lalana</field>
+    <field name="isbn">978-2-87678-783-0</field>
+    <field name="author_id" ref="author_michele_rakotoson"/>
+    <field name="category_id" ref="category_roman_contemporain"/>
+    <field name="pages">198</field>
+    <field name="publication_date">2002-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 8 : Juillet au pays                    -->
+<!-- ============================================ -->
+<record id="book_juillet_au_pays" model="library.book">
+    <field name="name">Juillet au pays</field>
+    <field name="isbn">978-2-914659-88-8</field>
+    <field name="author_id" ref="author_michele_rakotoson"/>
+    <field name="category_id" ref="category_recit_temoignage"/>
+    <field name="pages">208</field>
+    <field name="publication_date">2007-10-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 9 : Tovonay, l'enfant du Sud            -->
+<!-- ============================================ -->
+<record id="book_tovonay_enfant_du_sud" model="library.book">
+    <field name="name">Tovonay, l'enfant du Sud</field>
+    <field name="isbn">978-2-84280-159-5</field>
+    <field name="author_id" ref="author_michele_rakotoson"/>
+    <field name="category_id" ref="category_litterature_jeunesse"/>
+    <field name="pages">128</field>
+    <field name="publication_date">2010-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 10 : Passeport pour Antananarivo        -->
+<!-- ============================================ -->
+<record id="book_passeport_antananarivo" model="library.book">
+    <field name="name">Passeport pour Antananarivo</field>
+    <field name="isbn">978-2-35639-054-7</field>
+    <field name="author_id" ref="author_michele_rakotoson"/>
+    <field name="category_id" ref="category_recit_voyage"/>
+    <field name="pages">96</field>
+    <field name="publication_date">2011-05-05</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 11 : Ambatomanga                       -->
+<!-- ============================================ -->
+<record id="book_ambatomanga" model="library.book">
+    <field name="name">Ambatomanga, le silence et la douleur</field>
+    <field name="isbn">978-2-919300-59-4</field>
+    <field name="author_id" ref="author_michele_rakotoson"/>
+    <field name="category_id" ref="category_roman_historique"/>
+    <field name="pages">267</field>
+    <field name="publication_date">2022-05-05</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 12 : Soza le pêcheur                   -->
+<!-- ============================================ -->
+<record id="book_soza_le_pecheur" model="library.book">
+    <field name="name">Soza le pêcheur</field>
+    <field name="isbn">978-2-916362-06-9</field>
+    <field name="author_id" ref="author_cyprienne_toazara"/>
+    <field name="category_id" ref="category_conte"/>
+    <field name="pages">16</field>
+    <field name="publication_date">2007-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 13 : Ny Bokiko 2                       -->
+<!-- ============================================ -->
+<record id="book_ny_bokiko_2" model="library.book">
+    <field name="name">Ny Bokiko 2</field>
+    <field name="isbn">978-2-916362-79-3</field>
+    <field name="author_id" ref="author_marie_michele_rakotoanosy"/>
+    <field name="category_id" ref="category_album_jeunesse"/>
+    <field name="pages">36</field>
+    <field name="publication_date">2017-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 14 : I Vonindrano sy i Zavonandro      -->
+<!-- ============================================ -->
+<record id="book_i_vonindrano_sy_i_zavonandro" model="library.book">
+    <field name="name">I Vonindrano sy i Zavonandro</field>
+    <field name="isbn">978-2-916362-82-3</field>
+    <field name="author_id" ref="author_max_razafindraibe"/>
+    <field name="category_id" ref="category_album_jeunesse"/>
+    <field name="pages">16</field>
+    <field name="publication_date">2017-01-01</field>
+    <field name="state">published</field>
+</record>
+
+
+<!-- ============================================ -->
+<!-- LIVRE 15 : Lisy Mianjoria                    -->
+<!-- ============================================ -->
+<record id="book_lisy_mianjoria" model="library.book">
+    <field name="name">Lisy Mianjoria</field>
+    <field name="isbn">9781304792853</field>
+    <field name="author_id" ref="author_mose_njo"/>
+    <field name="category_id" ref="category_science_fiction"/>
+    <field name="pages">318</field>
+    <field name="publication_date">2023-12-22</field>
+    <field name="state">published</field>
+</record>
 
     </data>
 </odoo>

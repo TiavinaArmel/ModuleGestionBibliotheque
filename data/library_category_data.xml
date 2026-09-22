@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================================ -->
+        <!-- CATÉGORIES (fichier de données a placée en deuxième place ,après les auteurs)-->
+        <!-- ils sert aussi de depandances au livres -->
+        <!-- ============================================ -->
+
+        <record id="category_roman" model="library.category">
+            <field name="name">Roman</field>
+            <field name="description">Œuvres romanesques</field>
+        </record>
+
+        <record id="category_science_fiction" model="library.category">
+            <field name="name">Science-Fiction</field>
+            <field name="description">Anticipation, dystopie</field>
+        </record>
+        <!-- ============================================ -->
+        <!-- CATEGORIE 1 : Roman                           -->
+        <!-- ============================================ -->
+        <record id="category_roman" model="library.category">
+            <field name="name">Roman</field>
+            <field name="description">Œuvre de fiction développée autour de personnages, d'une
+                intrigue et d'une histoire.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 2 : Roman historique                -->
+        <!-- ============================================ -->
+        <record id="category_roman_historique" model="library.category">
+            <field name="name">Roman historique</field>
+            <field name="description">Roman dont l'intrigue se déroule dans un contexte ou une
+                période historique réelle.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 3 : Roman contemporain               -->
+        <!-- ============================================ -->
+        <record id="category_roman_contemporain" model="library.category">
+            <field name="name">Roman contemporain</field>
+            <field name="description">Roman traitant principalement de réalités humaines, sociales
+                ou culturelles contemporaines.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 4 : Poésie                           -->
+        <!-- ============================================ -->
+        <record id="category_poesie" model="library.category">
+            <field name="name">Poésie</field>
+            <field name="description">Œuvre littéraire composée de textes poétiques utilisant
+                notamment le rythme, les images et le langage poétique.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 5 : Science-Fiction                 -->
+        <!-- ============================================ -->
+        <record id="category_science_fiction" model="library.category">
+            <field name="name">Science-Fiction</field>
+            <field name="description">Œuvre de fiction explorant des mondes imaginaires, des
+                technologies, des sociétés futures ou des réalités alternatives.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 6 : Littérature jeunesse             -->
+        <!-- ============================================ -->
+        <record id="category_litterature_jeunesse" model="library.category">
+            <field name="name">Littérature jeunesse</field>
+            <field name="description">Ouvrages principalement destinés aux enfants et aux jeunes
+                lecteurs, adaptés à leur âge et à leur niveau de lecture.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 7 : Album jeunesse                   -->
+        <!-- ============================================ -->
+        <record id="category_album_jeunesse" model="library.category">
+            <field name="name">Album jeunesse</field>
+            <field name="description">Ouvrage illustré destiné principalement aux jeunes enfants,
+                dans lequel les images occupent une place importante dans le récit.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 8 : Conte                            -->
+        <!-- ============================================ -->
+        <record id="category_conte" model="library.category">
+            <field name="name">Conte</field>
+            <field name="description">Récit généralement court mettant en scène des personnages, des
+                événements imaginaires ou issus de la tradition orale.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 9 : Récit / Témoignage               -->
+        <!-- ============================================ -->
+        <record id="category_recit_temoignage" model="library.category">
+            <field name="name">Récit / Témoignage</field>
+            <field name="description">Texte fondé sur une expérience personnelle, des souvenirs, des
+                observations ou le témoignage de l'auteur.</field>
+        </record>
+
+
+        <!-- ============================================ -->
+        <!-- CATEGORIE 10 : Récit de voyage                 -->
+        <!-- ============================================ -->
+        <record id="category_recit_voyage" model="library.category">
+            <field name="name">Récit de voyage</field>
+            <field name="description">Récit consacré à un voyage, à la découverte d'un lieu et aux
+                expériences ou observations de l'auteur.</field>
+        </record>
+
+    </data>
+</odoo>
