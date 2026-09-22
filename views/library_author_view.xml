@@ -34,8 +34,8 @@
                             <page> est une page d'onglet.
                         -->
                         <notebook>
-                            <page string="Livres écrits">
-                                <field name="book_ids">
+                            <page string="Livres écrits">#livres écrits par l'auteur titre <field
+                                    name="book_ids">
                                     <tree>
                                         <field name="name" />
                                         <field name="publication_date" />
@@ -53,9 +53,9 @@
         <!-- VUE LISTE (TREE) AUTEUR                      -->
         <!-- ============================================ -->
         <record id="view_library_author_tree" model="ir.ui.view">
-            <field name="name">library.author.tree</field>
-            <field name="model">library.author</field>
-            <field name="arch" type="xml">
+            <field name="name">library.author.tree</field> #medèle.types de vue 
+            <field name="model">library.author</field> #le modèle sur lequel la vue s'applique
+             <field name="arch" type="xml"> #le types de vue (ici tree avec xml ) 
                 <tree string="Auteurs">
                     <field name="name" />
                     <field name="pseudonym" />
@@ -68,11 +68,10 @@
         <!-- ============================================ -->
         <!-- VUE RECHERCHE AUTEUR                         -->
         <!-- ============================================ -->
-        <record id="view_library_author_search" model="ir.ui.view">
-            <field name="name">library.author.search</field>
-            <field name="model">library.author</field>
-            <field name="arch" type="xml">
-                <search>
+        <record id="view_library_author_search" model="ir.ui.view"> #vue de recherche pour le modèle
+            library.author <field name="name">library.author.search</field> #nom de la vue <field
+                name="model">library.author</field> #le modèle sur lequel la vue s'applique <field
+                name="arch" type="xml"> #le type de vue (ici search avec xml ) <search>
                     <field name="name" />
                     <field name="nationality" />
                     <field name="pseudonym" />
@@ -84,17 +83,19 @@
         <!-- VUE KANBAN AUTEUR                            -->
         <!-- ============================================ -->
         <record id="view_library_author_kanban" model="ir.ui.view">
-            <field name="name">library.author.kanban</field>
-            <field name="model">library.author</field>
-            <field name="arch" type="xml">
-                <kanban>
-                    <!-- 1. Déclarations des champs utilisés -->
-                    <field name="name" />
-                    <field name="pseudonym" />
-                    <field name="nationality" />
-                    <field name="book_count" />
-
-                    <!-- 2. Le template (OBLIGATOIRE) -->
+            <field name="name">library.author.kanban</field> #nom de la vue <field name="model">
+            library.author</field> #le modèle sur lequel la vue s'applique <field name="arch"
+                type="xml"> #le type de vue (ici kanban avec xml ) <kanban> #vue kanban pour le
+            modèle library.author comme une petite carte avec les informations de l'auteur <!-- 1.
+                    Déclarations des champs utilisés -->
+                    <field
+                        name="name" /> #nom de l'auteur
+                         <field name="pseudonym" />#le pseudonyme de l'auteur 
+            <field name="nationality" /> #son natiionlité 
+            <field name="book_count" />
+            #nombre de livre qu'il a écrit
+            
+            <!-- 2. Le template (OBLIGATOIRE) -->
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click">
