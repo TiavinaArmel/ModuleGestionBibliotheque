@@ -40,6 +40,8 @@ class LibraryAuthor(models.Model):
         help="Nom et prénom de l'auteur."
     )
 
+#champs texte simple pour la psoeudonyme d'auteur 
+pseudonym = fields.Char(string="Pseudonyme", help="Pseudonyme de l'auteur")
     # Champ texte simple pour la nationalité.
     nationality = fields.Char(string="Nationalité")
 

@@ -22,6 +22,7 @@
                                 <field name="birth_date"/>
                             </group>
                             <group>
+                                <field name="pseudonym"/>   
                                 <field name="book_count"/>
                             </group>
                         </group>
@@ -57,6 +58,7 @@
             <field name="arch" type="xml">
                 <tree string="Auteurs">
                     <field name="name"/>
+                    <field name="pseudonym"/>
                     <field name="nationality"/>
                     <field name="book_count"/>
                 </tree>
@@ -73,6 +75,7 @@
                 <search>
                     <field name="name"/>
                     <field name="nationality"/>
+                    <field name="pseudonym"/>
                 </search>
             </field>
         </record>
