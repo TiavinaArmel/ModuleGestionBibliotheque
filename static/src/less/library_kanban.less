@@ -1,0 +1,607 @@
+/* ============================================================
+   LIBRARY APP
+   Styles personnalisés des cartes Kanban
+   ============================================================ */
+
+
+/* ============================================================
+   1. STYLE COMMUN
+   ============================================================ */
+
+.library_kanban_card,
+.library_book_kanban_card,
+.library_author_kanban_card {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    min-height: 145px;
+    padding: 24px;
+    margin: 8px;
+
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+    border-radius: 14px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+
+    overflow: hidden;
+    box-sizing: border-box;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+/* Barre verticale à gauche */
+
+.library_kanban_card::before,
+.library_book_kanban_card::before,
+.library_author_kanban_card::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    background: #875A7B;
+}
+
+
+/* Effet au survol */
+
+.library_kanban_card:hover,
+.library_book_kanban_card:hover,
+.library_author_kanban_card:hover {
+    transform: translateY(-4px);
+
+    border-color: #d5d5d5;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ============================================================
+   2. ICÔNE
+   ============================================================ */
+
+.library_kanban_icon,
+.library_book_kanban_icon,
+.library_author_kanban_icon {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+
+    margin-right: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    font-size: 25px;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+/* Catégorie */
+
+.library_kanban_icon {
+    background: #f3eaf1;
+    color: #875A7B;
+}
+
+
+/* Livre */
+
+.library_book_kanban_icon {
+    background: #eaf2fb;
+    color: #357abd;
+}
+
+
+/* Auteur */
+
+.library_author_kanban_icon {
+    background: #edf5ed;
+    color: #4d8b57;
+}
+
+
+/* Animation icône */
+
+.library_kanban_card:hover .library_kanban_icon,
+.library_book_kanban_card:hover .library_book_kanban_icon,
+.library_author_kanban_card:hover .library_author_kanban_icon {
+    color: #ffffff;
+    transform: scale(1.06);
+}
+
+
+/* Couleur au hover */
+
+.library_kanban_card:hover .library_kanban_icon {
+    background: #875A7B;
+}
+
+.library_book_kanban_card:hover .library_book_kanban_icon {
+    background: #357abd;
+}
+
+.library_author_kanban_card:hover .library_author_kanban_icon {
+    background: #4d8b57;
+}
+
+
+/* ============================================================
+   3. CONTENU
+   ============================================================ */
+
+.library_kanban_content,
+.library_book_kanban_content,
+.library_author_kanban_content {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* ============================================================
+   4. TITRES
+   ============================================================ */
+
+.library_kanban_title,
+.library_book_kanban_title,
+.library_author_kanban_title {
+    margin-bottom: 10px;
+
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    word-break: break-word;
+}
+
+
+/* Catégorie */
+
+.library_kanban_title {
+    color: #875A7B;
+}
+
+
+/* Livre */
+
+.library_book_kanban_title {
+    color: #357abd;
+}
+
+
+/* Auteur */
+
+.library_author_kanban_title {
+    color: #4d8b57;
+}
+
+
+/* ============================================================
+   5. PETITE BARRE SOUS LE TITRE
+   ============================================================ */
+
+.library_kanban_separator,
+.library_book_kanban_separator,
+.library_author_kanban_separator {
+    width: 40px;
+    height: 3px;
+
+    margin-bottom: 13px;
+
+    border-radius: 10px;
+}
+
+
+/* Couleurs */
+
+.library_kanban_separator {
+    background: #875A7B;
+}
+
+.library_book_kanban_separator {
+    background: #357abd;
+}
+
+.library_author_kanban_separator {
+    background: #4d8b57;
+}
+
+
+/* ============================================================
+   6. LIGNES D'INFORMATIONS
+   ============================================================ */
+
+.library_kanban_line,
+.library_book_kanban_line,
+.library_author_kanban_line {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 7px;
+
+    line-height: 1.4;
+}
+
+
+/* Label */
+
+.library_kanban_label,
+.library_book_kanban_label,
+.library_author_kanban_label {
+    color: #777777;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    margin-right: 6px;
+}
+
+
+/* Valeur */
+
+.library_kanban_value,
+.library_book_kanban_value,
+.library_author_kanban_value {
+    color: #333333;
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   7. BADGES
+   ============================================================ */
+
+.library_kanban_badge,
+.library_book_kanban_badge,
+.library_author_kanban_badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    height: 30px;
+
+    padding: 0 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* Catégorie : nombre de livres */
+
+.library_kanban_badge {
+    background: #f3eaf1;
+    color: #875A7B;
+}
+
+
+/* Livre : nombre de pages */
+
+.library_book_kanban_badge {
+    background: #eaf2fb;
+    color: #357abd;
+}
+
+
+/* Auteur : nationalité */
+
+.library_author_kanban_badge {
+    background: #edf5ed;
+    color: #4d8b57;
+}
+
+
+/* ============================================================
+   8. PIED DE CARTE
+   ============================================================ */
+
+.library_kanban_footer,
+.library_book_kanban_footer,
+.library_author_kanban_footer {
+    margin-top: 12px;
+    padding-top: 10px;
+
+    border-top: 1px solid #eeeeee;
+}
+
+
+/* ============================================================
+   9. LIVRE : INFORMATIONS SPÉCIFIQUES
+   ============================================================ */
+
+.library_book_kanban_isbn {
+    color: #666666;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+
+/* ============================================================
+   10. AUTEUR : INFORMATIONS SPÉCIFIQUES
+   ============================================================ */
+
+.library_author_kanban_pseudonym {
+    color: #666666;
+    font-style: italic;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   11. EFFET CLIQUABLE
+   ============================================================ */
+
+.library_kanban_card:active,
+.library_book_kanban_card:active,
+.library_author_kanban_card:active {
+    transform: translateY(-1px);
+}
+/* =========================================================
+   LIBRARY CATEGORY - KANBAN
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   CARTE PRINCIPALE
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    min-height: 145px;
+
+    padding: 24px;
+
+    margin: 8px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8e8e8;
+    border-radius: 14px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+/* ---------------------------------------------------------
+   EFFET AU SURVOL
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_card:hover {
+
+    transform: translateY(-4px);
+
+    border-color: #d5d5d5;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+}
+
+
+/* ---------------------------------------------------------
+   PETITE BARRE DECORATIVE
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    background: #875A7B;
+
+}
+
+
+/* ---------------------------------------------------------
+   ICONE
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_icon {
+
+    width: 58px;
+    height: 58px;
+
+    min-width: 58px;
+
+    margin-right: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f3eaf1;
+
+    border-radius: 14px;
+
+    color: #875A7B;
+
+    font-size: 25px;
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+/* Animation de l'icône */
+
+.library_category_kanban .library_category_card:hover
+.library_category_icon {
+
+    background: #875A7B;
+
+    color: #ffffff;
+
+    transform: scale(1.06);
+
+}
+
+
+/* ---------------------------------------------------------
+   CONTENU
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_content {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+/* ---------------------------------------------------------
+   NOM DE LA CATEGORIE
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_title {
+
+    margin-bottom: 10px;
+
+    color: #2f2f2f;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+
+    word-break: break-word;
+
+}
+
+
+/* ---------------------------------------------------------
+   SEPARATEUR
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_separator {
+
+    width: 40px;
+
+    height: 3px;
+
+    margin-bottom: 13px;
+
+    background: #875A7B;
+
+    border-radius: 10px;
+
+}
+
+
+/* ---------------------------------------------------------
+   INFORMATIONS SUR LES LIVRES
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_count {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+}
+
+
+/* Texte "Nombre de livres" */
+
+.library_category_kanban .library_category_count_label {
+
+    color: #777777;
+
+    font-size: 13px;
+
+}
+
+
+/* ---------------------------------------------------------
+   NOMBRE DE LIVRES
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_count_value {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    height: 30px;
+
+    padding: 0 10px;
+
+    background: #f3eaf1;
+
+    color: #875A7B;
+
+    border-radius: 20px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+}
+
+
+/* ---------------------------------------------------------
+   ADAPTATION AUX PETITES CARTES
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_card {
+
+    box-sizing: border-box;
+
+}
+
+
+/* ---------------------------------------------------------
+   ETAT AU CLIC
+   --------------------------------------------------------- */
+
+.library_category_kanban .library_category_card:active {
+
+    transform: translateY(-1px);
+
+}

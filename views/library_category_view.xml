@@ -10,11 +10,11 @@
                 <form string="Catégorie">
                     <sheet>
                         <group>
-                            <field name="name"/>
-                            <field name="book_count"/>
+                            <field name="name" />
+                            <field name="book_count" />
                         </group>
                         <group string="Description">
-                            <field name="description" nolabel="1"/>
+                            <field name="description" nolabel="1" />
                         </group>
                     </sheet>
                 </form>
@@ -22,33 +22,85 @@
         </record>
 
         <!-- Vue liste -->
-        <record id="view_library_category_tree" model="ir.ui.view">
+        <record
+            id="view_library_category_tree" model="ir.ui.view">
             <field name="name">library.category.tree</field>
             <field name="model">library.category</field>
             <field name="arch" type="xml">
                 <tree string="Catégories">
-                    <field name="name"/>
-                    <field name="book_count"/>
+                    <field name="name" />
+                    <field name="book_count" />
                 </tree>
             </field>
         </record>
+        <!-- VUE KANBAN DE CATEGORIE -->
+        ```xml         <!-- VUE KANBAN DE CATEGORIE -->
+<record id="view_library_category_kanban" model="ir.ui.view">
+            <field name="name">library.category.kanban</field>
+            <field name="model">library.category</field>
+            <field name="arch" type="xml">
 
-        <!-- Vue recherche -->
+                <kanban class="library_category_kanban">
+                    <field name="name" />
+                    <field name="book_count" />
+
+                    <templates>
+                        <t t-name="kanban-box">
+
+                            <div class="library_category_card">
+
+                                <!-- Icône de la catégorie -->
+                                <div class="library_category_icon">
+                                    <span class="fa fa-book" />
+                                </div>
+
+                                <!-- Informations -->
+                                <div class="library_category_content">
+
+                                    <div class="library_category_title">
+                                        <field name="name" />
+                                    </div>
+
+                                    <div class="library_category_separator" />
+
+                                    <div class="library_category_count">
+                                        <span class="library_category_count_label">
+                                            Nombre de livres
+                                        </span>
+
+                                        <span class="library_category_count_value">
+                                            <field name="book_count" />
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </t>
+                    </templates>
+
+                </kanban>
+
+            </field>
+        </record>
+        ``` <!-- Vue recherche -->
         <record id="view_library_category_search" model="ir.ui.view">
             <field name="name">library.category.search</field>
             <field name="model">library.category</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="name"/>
+                    <field name="name" />
                 </search>
             </field>
         </record>
 
         <!-- Action -->
-        <record id="action_library_category" model="ir.actions.act_window">
+        <record
+            id="action_library_category" model="ir.actions.act_window">
             <field name="name">Catégories</field>
             <field name="res_model">library.category</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,kanban,form</field>
         </record>
 
     </data>
