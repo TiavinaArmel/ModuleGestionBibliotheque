@@ -85,6 +85,12 @@ class LibraryBook(models.Model):
         string="Auteur",
         ondelete='set null'   # Si l'auteur est supprimé, author_id devient NULL.
     )
+    #champs relative à l'auteur related field  from library.author
+    author_nationality = fields.Char(
+        string="Nationalité de l'auteur", 
+        related='author_id.nationality',  # Champ lié à author_id.nationality
+        readonly=True,                     # Non modifiable par l'utilisateur.
+    )
 
     # Many2one vers la catégorie.
     category_id = fields.Many2one(
@@ -92,7 +98,12 @@ class LibraryBook(models.Model):
         string="Catégorie",
         ondelete='set null'
     )
-
+    category_name = fields.Char(
+        string ="nom de la catégoerie", 
+        related='category_id.name',
+        readonly=True
+    )
+    
     # ------------------------------------------------------------------
     # CONTRAINTES SQL
     # ------------------------------------------------------------------

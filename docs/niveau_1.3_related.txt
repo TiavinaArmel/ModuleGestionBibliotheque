@@ -1,0 +1,388 @@
+================================================================================
+NIVEAU 1.3 — LES CHAMPS RELATED
+================================================================================
+
+Date         : 2026-09-24
+Module       : library_app
+Version Odoo : 10.0 Community
+Base de données : TESTPROJET
+Auteur       : Tiavina Armel
+
+================================================================================
+1. OBJECTIF
+================================================================================
+
+Ajouter des CHAMPS RELATED au modèle library.book pour afficher
+automatiquement les informations de l'auteur et de la catégorie,
+sans avoir à naviguer vers leurs fiches respectives.
+
+Champs related ajoutés :
+    - author_nationality  (affiche author_id.nationality)
+    - category_name       (affiche category_id.name)
+
+================================================================================
+2. CONCEPTS CLÉS
+================================================================================
+
+2.1. Un champ related, c'est quoi ?
+-----------------------------------
+
+Un champ related est un champ qui AFFICHE AUTOMATIQUEMENT la valeur
+d'un champ d'un AUTRE modèle, via une RELATION (Many2one).
+
+Ce n'est PAS :
+    - un lien cliquable,
+    - un bouton,
+    - un popup.
+
+C'est :
+    - un AFFICHAGE PASSIF d'une valeur,
+    - recalculé à chaque lecture,
+    - sans duplication en base (si store=False).
+
+2.2. Analogie — Le rétroviseur
+------------------------------
+
+Imagine une voiture :
+    - Le PARE-BRISE   = la vue principale (fiche du livre).
+    - Le RÉTROVISEUR  = le champ related.
+
+Le rétroviseur te montre une information qui est DERRIÈRE, sans que
+tu aies à te retourner. Tu ne cliques pas dessus. Tu regardes.
+
+Un champ related fait pareil : il affiche une info qui vit ailleurs,
+sans que tu aies à naviguer.
+
+2.3. Prérequis — Une relation Many2one
+--------------------------------------
+
+Pour créer un champ related, il faut OBLIGATOIREMENT :
+
+    1. Une relation Many2one vers le modèle cible.
+    2. Un champ cible qui existe dans le modèle cible.
+
+Exemple dans library.book :
+    - author_id = Many2one vers library.author
+    - category_id = Many2one vers library.category
+
+SANS relation Many2one, PAS de related possible.
+
+2.4. Où écrire le champ related ?
+---------------------------------
+
+RÈGLE D'OR :
+    Le related s'écrit dans le modèle QUI A LA RELATION Many2one.
+
+Dans notre cas :
+    - La relation author_id est dans library.book.
+    - Donc le related author_nationality s'écrit dans library.book.
+    - PAS dans library.author.
+
+Analogie :
+    - Le câble USB est branché sur l'ordinateur (Many2one).
+    - On lit le fichier DEPUIS l'ordinateur (related).
+    - PAS depuis le disque dur (modèle cible).
+
+2.5. Syntaxe d'un champ related
+-------------------------------
+
+nom_du_champ = fields.TypeDeChamp(
+    string="Label affiché",
+    related='champ_relation.champ_cible',
+    store=False
+)
+
+Décomposition :
+    - nom_du_champ       : nom technique (snake_case).
+    - fields.TypeDeChamp : type du champ (Char, Integer, Date...).
+    - string             : label affiché dans l'interface.
+    - related            : chemin vers le champ cible.
+    - store              : False (recalculé) ou True (stocké).
+
+2.6. Le chemin related
+----------------------
+
+Format : 'champ_relation.champ_cible'
+
+Exemples :
+    - 'author_id.name'           → nom de l'auteur
+    - 'author_id.nationality'    → nationalité de l'auteur
+    - 'category_id.name'         → nom de la catégorie
+    - 'category_id.description'  → description de la catégorie
+
+Le point (.) sépare la relation du champ cible.
+
+2.7. store=False vs store=True
+------------------------------
+
+store=False (défaut) :
+    - AUCUNE colonne en base.
+    - Valeur recalculée à chaque lecture.
+    - Ne peut PAS être trié ou filtré.
+    - Est READONLY (non modifiable).
+
+store=True :
+    - Une COLONNE est créée en base.
+    - La valeur est stockée.
+    - Peut être trié et filtré.
+    - Doit être mis à jour si le modèle cible change.
+
+================================================================================
+3. SCAN DES RELATED POSSIBLES DANS LE PROJET
+================================================================================
+
+3.1. Carte des relations du projet
+----------------------------------
+
+library.book :
+    - author_id    = Many2one('library.author')
+    - category_id  = Many2one('library.category')
+
+library.author :
+    - book_ids     = One2many('library.book', 'author_id')
+    (Pas de Many2one → pas de related direct possible)
+
+library.category :
+    - book_ids     = One2many('library.book', 'category_id')
+    (Pas de Many2one → pas de related direct possible)
+
+CONCLUSION :
+    Tous les champs related du projet se font UNIQUEMENT dans
+    library.book.
+
+3.2. Related possibles via author_id
+------------------------------------
+
++------------------------+--------------------------+---------+
+| Nom du champ           | Chemin                   | Type    |
++------------------------+--------------------------+---------+
+| author_name            | author_id.name           | Char    |
+| author_pseudonym       | author_id.pseudonym      | Char    |
+| author_nationality     | author_id.nationality    | Char    |
+| author_birth_date      | author_id.birth_date     | Date    |
+| author_biography       | author_id.biography      | Text    |
+| author_book_count      | author_id.book_count     | Integer |
++------------------------+--------------------------+---------+
+
+3.3. Related possibles via category_id
+--------------------------------------
+
++------------------------+--------------------------+---------+
+| Nom du champ           | Chemin                   | Type    |
++------------------------+--------------------------+---------+
+| category_name          | category_id.name         | Char    |
+| category_description   | category_id.description  | Text    |
+| category_book_count    | category_id.book_count   | Integer |
++------------------------+--------------------------+---------+
+
+3.4. Recommandations
+--------------------
+
+FORTEMENT RECOMMANDÉS :
+    - author_nationality  (utile, court, non redondant)
+    - category_name       (utile, court)
+
+UTILES :
+    - author_pseudonym
+    - category_description
+    - author_birth_date
+
+DÉCONSEILLÉS :
+    - author_biography     (texte long, surcharge la vue)
+    - author_book_count    (calculé à chaque lecture)
+    - category_book_count  (idem)
+
+NOTE IMPORTANTE :
+    Le Many2one author_id affiche DÉJÀ automatiquement le nom de
+    l'auteur (via name_get). Donc author_name est REDONDANT.
+
+    Idem : category_id affiche déjà le nom de la catégorie.
+    Donc category_name est redondant MAIS utile pour l'apprentissage.
+
+================================================================================
+4. FICHIERS MODIFIÉS
+================================================================================
+
+4.1. Fichier models/library_book.py (MODIFIÉ)
+---------------------------------------------
+
+# Champs related ajoutés après les Many2one existants.
+
+author_nationality = fields.Char(
+    string="Nationalité de l'auteur",
+    related='author_id.nationality',
+    store=False
+)
+
+category_name = fields.Char(
+    string="Nom de la catégorie",
+    related='category_id.name',
+    store=False
+)
+
+Emplacement : dans la classe LibraryBook, après les champs
+              author_id et category_id.
+
+4.2. Fichier views/library_book_view.xml (MODIFIÉ)
+--------------------------------------------------
+
+Dans la vue FORM, dans le <group> qui contient author_id
+et category_id :
+
+    <field name="author_id"/>
+    <field name="author_nationality"/>   <!-- AJOUTÉ -->
+    <field name="category_id"/>
+    <field name="category_name"/>         <!-- AJOUTÉ -->
+
+Emplacement : juste après les Many2one correspondants.
+
+================================================================================
+5. ERREURS RENCONTRÉES ET SOLUTIONS
+================================================================================
+
+5.1. Erreur : Champ related non visible
+---------------------------------------
+
+Symptôme : le related n'apparaît nulle part dans l'interface.
+
+Cause : le champ est déclaré dans le .py MAIS pas ajouté dans la vue.
+
+Solution :
+    Ajouter <field name="nom_du_champ"/> dans la vue XML.
+
+Règle : un champ a besoin de DEUX choses pour être visible :
+        1. Déclaration dans le .py.
+        2. Affichage dans le .xml.
+
+--------------------------------------------------------------------------------
+
+5.2. Erreur : Field 'xxx' does not exist
+----------------------------------------
+
+Symptôme :
+    Field 'author_nationnality' does not exist
+
+Cause : faute de frappe dans le nom du champ (deux "n" au lieu d'un).
+
+Solution :
+    Vérifier que le nom du <field> correspond EXACTEMENT au nom
+    Python (casse incluse).
+
+Règle : le nom technique est sensible à la casse et à l'orthographe.
+
+--------------------------------------------------------------------------------
+
+5.3. Erreur : KeyError sur le chemin related
+--------------------------------------------
+
+Symptôme :
+    KeyError: 'author' (au lieu de 'author_id')
+
+Cause : chemin related incorrect.
+
+Solution :
+    Le chemin doit utiliser le NOM EXACT du Many2one :
+        related='author_id.nationality'   (correct)
+        related='author.nationality'      (incorrect)
+
+Règle : le premier segment du chemin est le nom du Many2one.
+
+--------------------------------------------------------------------------------
+
+5.4. Erreur : Type incompatible
+-------------------------------
+
+Symptôme :
+    champ nationalité déclaré comme Integer au lieu de Char.
+
+Cause : type de champ incorrect.
+
+Solution :
+    Le type du related doit correspondre au type du champ cible :
+        author_id.nationality est un Char
+        → author_nationality doit être un Char.
+
+Règle : aligner le type du related avec le type du champ cible.
+
+================================================================================
+6. RÉSULTAT FINAL
+================================================================================
+
+La fiche du livre (Les Misérables) affiche :
+
++-----------------------------+------------------+
+| Référence du livre          | LIV-000001       |
+| Titre                       | Les Misérables   |
+| ISBN                        | 978-2-07-040850-4|
+| Auteur                      | Victor Hugo      |
+| Nationalité de l'auteur     | Française        | ← related
+| Catégorie                   | Roman            |
+| Nom de la catégorie         | Roman            | ← related
+| Nombre de pages             | 1500             |
+| Date de publication         | 01/01/1862       |
+| Disponible                  | ☐                |
++-----------------------------+------------------+
+
+Les deux related sont visibles et fonctionnels.
+
+================================================================================
+7. COMMANDES UTILES
+================================================================================
+
+7.1. Vérifier le contenu d'un fichier .py
+-----------------------------------------
+
+findstr "author_nationality" C:\ODOO_10_DEV\custom-addons\library_app\models\library_book.py
+
+7.2. Vérifier le contenu d'un fichier .xml
+------------------------------------------
+
+findstr "author_nationality" C:\ODOO_10_DEV\custom-addons\library_app\views\library_book_view.xml
+
+7.3. Redémarrer Odoo après modification .py
+-------------------------------------------
+
+Ctrl+C dans le terminal Odoo
+start_odoo.bat
+
+7.4. Forcer la mise à jour du module
+------------------------------------
+
+cd /d "C:\Program Files (x86)\Odoo 10.0\server" && odoo-bin.exe -c "C:\ODOO_10_DEV\odoo.conf" -d TESTPROJET -u library_app --stop-after-init --log-level=info
+
+7.5. Vider le cache navigateur
+------------------------------
+
+Ctrl+Shift+R dans le navigateur.
+
+================================================================================
+8. POINTS À RETENIR
+================================================================================
+
+1. Un champ related AFFICHE la valeur d'un champ d'un autre modèle.
+
+2. Il a besoin d'une relation Many2one vers le modèle cible.
+
+3. Le related s'écrit dans le modèle QUI A LA RELATION (pas dans
+   le modèle cible).
+
+4. Syntaxe : related='champ_relation.champ_cible'.
+
+5. store=False (défaut) : recalculé, pas de colonne.
+   store=True : stocké, colonne créée, triable/filtrable.
+
+6. Un related est READONLY par défaut.
+
+7. Il doit être AJOUTÉ DANS LA VUE pour apparaître.
+
+8. Un Many2one affiche DÉJÀ le name de la cible (name_get).
+   Donc un related vers .name est souvent REDONDANT.
+
+9. Modifier un .py = redémarrer Odoo.
+   Modifier un .xml = mettre à jour le module.
+
+10. Ctrl+Shift+R pour vider le cache navigateur.
+
+================================================================================
+FIN DU DOCUMENT
+================================================================================

@@ -35,7 +35,8 @@
                                 <field name="name" />
                                 <field name="isbn" />
                                 <field name="author_id" />
-                                <field name="category_id" />
+                                <field name="author_nationality" />
+                                <field name="category_name" />
                             </group>
                             <group>
                                 <field name="pages" />
