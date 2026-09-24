@@ -38,6 +38,7 @@ Fonctionnalités :
         'views/library_menu.xml',
         'views/library_assets.xml',
         # data livres 
+        'data/library_sequence.xml',
         'data/library_author_data.xml',
         'data/library_category_data.xml',
         'data/library_book_data.xml',

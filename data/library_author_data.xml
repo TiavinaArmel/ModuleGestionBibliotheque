@@ -25,35 +25,41 @@
         <field name="biography">[Une ou deux phrases]</field>
     </record> 
 -->
-
-
+        <!-- ============================================ -->
+        <!-- AUTEUR 0 : Victor Hugo                       -->
+        <!-- ============================================ -->
         <record id="author_victor_hugo" model="library.author">
             <field name="name">Victor Hugo</field>
             <field name="pseudonym">Victor Hugo</field>
             <field name="nationality">Française</field>
             <field name="birth_date">1802-02-26</field>
-            <field name="biography">Victor Hugo était un écrivain et poète français, considéré comme
-                l'un des plus grands écrivains de la littérature mondiale.</field>
+            <field name="biography">Écrivain et poète français, considéré comme l'un des plus grands
+                écrivains de la littérature mondiale.</field>
         </record>
 
+        <!-- ============================================ -->
+        <!-- AUTEUR 0bis : George Orwell                  -->
+        <!-- ============================================ -->
         <record id="author_george_orwell" model="library.author">
             <field name="name">George Orwell</field>
             <field name="pseudonym">Eric Blair</field>
             <field name="nationality">Britannique</field>
             <field name="birth_date">1903-06-25</field>
-            <field name="biography">George Orwell était un écrivain et journaliste britannique,
-                connu pour ses œuvres critiques de la société moderne.</field>
+            <field name="biography">Écrivain et journaliste britannique, connu pour ses œuvres
+                critiques de la société moderne.</field>
         </record>
+
         <!-- ============================================ -->
         <!-- AUTEUR 1 : Naivo                             -->
         <!-- ============================================ -->
         <record id="author_naivoharisoa_patrick_ramamonjisoa" model="library.author">
             <field name="name">Naivoharisoa Patrick Ramamonjisoa</field>
-            <field name="pen_name">Naivo</field>
+            <field name="pseudonym">Naivo</field>
             <field name="nationality">Malgache</field>
             <field name="biography">Auteur malgache contemporain, connu pour Au-delà des rizières
                 (2012). Né vers 1960 (date précise non vérifiée).</field>
         </record>
+
         <!-- ============================================ -->
         <!-- AUTEUR 2 : Jean-Luc Raharimanana             -->
         <!-- ============================================ -->
@@ -66,7 +72,6 @@
                 Antananarivo. Il est notamment l'auteur de Nour, 1947 et Revenir.</field>
         </record>
 
-
         <!-- ============================================ -->
         <!-- AUTEUR 3 : Jean-Joseph Rabearivelo           -->
         <!-- ============================================ -->
@@ -75,12 +80,11 @@
             <field name="pseudonym">Jean-Joseph Rabearivelo</field>
             <field name="nationality">Malgache</field>
             <field name="birth_date">1901-03-04</field>
-            <field name="biography">Poète et écrivain malgache majeur. Il est né sous le nom de
-                Joseph-Casimir Rabe et a utilisé Jean-Joseph Rabearivelo comme nom littéraire. La
+            <field name="biography">Poète et écrivain malgache majeur. Né sous le nom de
+                Joseph-Casimir Rabe, il a utilisé Jean-Joseph Rabearivelo comme nom littéraire. La
                 BnF retient le 4 mars 1901 comme date de naissance, bien que certaines sources
-                historiques indiquent une incertitude sur l'année.</field>
+                indiquent une incertitude sur l'année.</field>
         </record>
-
 
         <!-- ============================================ -->
         <!-- AUTEUR 4 : Michèle Rakotoson                 -->
@@ -90,38 +94,33 @@
             <field name="pseudonym">Michèle</field>
             <field name="nationality">Malgache</field>
             <field name="birth_date">1948-06-14</field>
-            <field name="biography">Écrivaine malgache née à Antananarivo. Elle est l'auteur de
-                plusieurs romans et récits consacrés notamment à Madagascar, à son histoire, à sa
-                société et à ses transformations.</field>
+            <field name="biography">Écrivaine malgache née à Antananarivo. Auteur de plusieurs
+                romans et récits consacrés à Madagascar, à son histoire, à sa société et à ses
+                transformations.</field>
         </record>
 
-
         <!-- ============================================ -->
-        <!-- AUTEUR 5 : Mose Njo                           -->
+        <!-- AUTEUR 5 : Mose Njo                          -->
         <!-- ============================================ -->
         <record id="author_mose_njo" model="library.author">
             <field name="name">Mose Njo</field>
             <field name="pseudonym">Mose</field>
             <field name="nationality">Malgache</field>
-            <field name="birth_date"></field>
-            <field name="biography">Auteur malgache de littérature de science-fiction. Il est
-                notamment connu pour le roman Lisy Mianjoria, publié en malgache. Date de naissance
-                précise : en cours de recherche.</field>
+            <field name="biography">Auteur malgache de littérature de science-fiction. Connu pour le
+                roman Lisy Mianjoria, publié en malgache. Date de naissance précise : en cours de
+                recherche.</field>
         </record>
 
-
         <!-- ============================================ -->
-        <!-- AUTEUR 6 : Cyprienne Toazara                  -->
+        <!-- AUTEUR 6 : Cyprienne Toazara                 -->
         <!-- ============================================ -->
         <record id="author_cyprienne_toazara" model="library.author">
             <field name="name">Cyprienne Toazara</field>
             <field name="pseudonym">Cyprienne</field>
             <field name="nationality">Malgache</field>
-            <field name="birth_date"></field>
             <field name="biography">Autrice malgache connue notamment pour Soza le pêcheur, ouvrage
                 de littérature jeunesse. Date de naissance précise : en cours de recherche.</field>
         </record>
-
 
         <!-- ============================================ -->
         <!-- AUTEUR 7 : Marie Michèle Rakotoanosy         -->
@@ -130,21 +129,18 @@
             <field name="name">Marie Michèle Rakotoanosy</field>
             <field name="pseudonym">Marie Michèle</field>
             <field name="nationality">Malgache</field>
-            <field name="birth_date"></field>
             <field name="biography">Autrice malgache associée à des ouvrages de littérature jeunesse
                 en langue malgache, notamment Ny Bokiko 2. Date de naissance précise : en cours de
                 recherche.</field>
         </record>
 
-
         <!-- ============================================ -->
-        <!-- AUTEUR 8 : Max Razafindraibe                  -->
+        <!-- AUTEUR 8 : Max Razafindraibe                 -->
         <!-- ============================================ -->
         <record id="author_max_razafindraibe" model="library.author">
             <field name="name">Max Razafindraibe</field>
             <field name="pseudonym">Max</field>
             <field name="nationality">Malgache</field>
-            <field name="birth_date"></field>
             <field name="biography">Auteur malgache associé à l'album jeunesse bilingue I Vonindrano
                 sy i Zavonandro. Date de naissance précise : en cours de recherche.</field>
         </record>

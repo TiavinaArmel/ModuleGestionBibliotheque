@@ -31,6 +31,7 @@
                     <sheet>
                         <group>
                             <group>
+                                <field name="ref_livre" readonly="1" />
                                 <field name="name" />
                                 <field name="isbn" />
                                 <field name="author_id" />
@@ -58,6 +59,7 @@
                     decoration-muted="state == 'draft'"
                     decoration-success="state == 'published'"
                     decoration-warning="state == 'borrowed'">
+                    <field name="ref_livre" />
                     <field name="name" />
                     <field name="author_id" />
                     <field name="category_id" />
@@ -76,6 +78,7 @@
             <field name="arch" type="xml">
                 <kanban>
                     <!-- Champs utilisés dans le template -->
+                    <field name="ref_livre" />
                     <field name="name" />
                     <field name="author_id" />
                     <field name="category_id" />
@@ -142,6 +145,7 @@
                     <!-- -->
                     <field name="name" />
                     <field name="author_id" />
+                    <field name="ref_livre" />
                     <!-- les filtres -->
                     <!-- filtre selon l'états du libre -->
                     <!-- afficher seulemetn les livres en broullions -->
@@ -156,7 +160,9 @@
                     <!-- afficher seulement les livres qui sont disponibles -->
                     <filter name="filter_available" string="Disponibles"
                         domain="[('available', '=', True)]" />
-
+                    <!-- n'affiche que le livres avec le reférence rechercher LIV-XXX-->
+                    <filter name="filter_ref_livre" string="Référence"
+                        domain="[('ref_livre', '!=', False)]" />
                     <!-- REGROUPEMENT   -->
 
                     <group expand="0" string="Grouper par">

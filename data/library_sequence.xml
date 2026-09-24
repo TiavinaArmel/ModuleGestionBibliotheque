@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- 
+        cette bloc de code montre le système de sequençage de reférenciation Unique et automatique 
+        des livres dans la bibliothèque. 
+        chaque livre aura par exemple : LIV-XXXX, où XXX est un nombre qui s'incrémente automatiquement à
+        chaque création d'un nouveau livre.
+        
+        -->
+
+        <record id="seq_library_book" model="ir.sequence">
+            <!-- name c'est la descirption de la sequence -->
+            <field name="name">livre</field>
+            <!-- le code c'est -->
+            <field name="code">library.book</field>
+            <!-- le préfixe de la reférence de chauque livre -->
+            <field name="prefix">LIV-</field>
+            <!-- padding c'est le nombre de chiffre minimum comme 0001 -0002 -->
+            <field name="padding">6</field>
+            <!-- le premier nombre qui initialise la séquence -->
+            <field name="number_next">1</field>
+            <!-- l'incrément de la séquence -->
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>

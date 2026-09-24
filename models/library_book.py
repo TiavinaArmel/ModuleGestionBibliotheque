@@ -23,6 +23,18 @@ class LibraryBook(models.Model):
     # CHAMPS SIMPLES
     # ------------------------------------------------------------------
 
+# Champ de référence unique du livre (ex: LIV-0001).
+# Ce champ est rempli automatiquement à la création via la séquence Odoo.
+    ref_livre = fields.Char(
+    string="Référence du livre",        # Libellé affiché dans l'interface.
+    required=True,                       # Champ obligatoire : ne peut pas être vide.
+    copy=False,                          # Ne copie PAS cette valeur lors d'une duplication.
+    readonly=True,                       # Non modifiable par l'utilisateur (auto-généré).
+    default=lambda self: self.env['ir.sequence'].next_by_code('library.book') or 'New'
+    # Valeur par défaut : demande à la séquence "library.book" le prochain numéro.
+    # "or 'New'" : si la séquence ne renvoie rien (cas rare), met 'New'.
+)
+    #nom du livre
     name = fields.Char(
         string="Titre",
         required=True,

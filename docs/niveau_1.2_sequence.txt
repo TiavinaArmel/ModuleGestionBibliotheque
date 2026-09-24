@@ -1,0 +1,310 @@
+ 
+================================================================================
+NIVEAU 1.2 — SÉQUENCE AUTOMATIQUE
+================================================================================
+
+Date         : 2026-09-24
+Module       : library_app
+Version Odoo : 10.0 Community
+Base de données : TESTPROJET
+Auteur       : Tiavina Armel
+
+================================================================================
+1. OBJECTIF
+================================================================================
+
+Ajouter une RÉFÉRENCE AUTOMATIQUE UNIQUE à chaque livre
+(format : LIV-000001, LIV-000002, etc.) en utilisant le modèle
+standard Odoo : ir.sequence.
+
+================================================================================
+2. CONCEPTS CLÉS
+================================================================================
+
+2.1. Une séquence Odoo, c'est quoi ?
+-----------------------------------
+
+- Un COMPTEUR AUTOMATIQUE de numéros uniques.
+- Modèle standard : ir.sequence.
+- Chaque séquence a un CODE UNIQUE, un PRÉFIXE, et un PADDING
+  (nombre de chiffres).
+- Analogie : distributeur de tickets à la banque.
+
+2.2. Ne pas confondre les champs
+--------------------------------
+
++----------+-------------------------------------+---------------+
+| Champ    | Rôle                                | Exemple       |
++----------+-------------------------------------+---------------+
+| name     | Description (interface admin)       | Livre         |
+| code     | Identifiant technique (Python)      | library.book  |
+| prefix   | Préfixe du numéro généré            | LIV-          |
+| padding  | Nombre de chiffres                  | 6 → 000001    |
++----------+-------------------------------------+---------------+
+
+2.3. ir.sequence est un modèle STANDARD
+---------------------------------------
+
+On ne crée PAS un nouveau modèle. On UTILISE ir.sequence en créant
+un ENREGISTREMENT dedans.
+
+2.4. Deux étapes d'implémentation
+---------------------------------
+
+Étape 1 : Déclarer la séquence dans un fichier XML.
+Étape 2 : Ajouter un champ dans le modèle Python qui appelle
+          la séquence.
+
+================================================================================
+3. FICHIERS CRÉÉS / MODIFIÉS
+================================================================================
+
+3.1. Fichier data/library_sequence.xml (CRÉÉ)
+--------------------------------------------
+
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_library_book" model="ir.sequence">
+            <field name="name">Livre</field>
+            <field name="code">library.book</field>
+            <field name="prefix">LIV-</field>
+            <field name="padding">6</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>
+
+Points importants :
+- noupdate="1" : la séquence est FIGÉE après installation,
+  sinon le compteur est réinitialisé à chaque mise à jour.
+- code : identifiant unique, utilisé en Python.
+- prefix : LIV- pour identifier les livres.
+- padding : 6 chiffres (format LIV-000001).
+
+3.2. Fichier models/library_book.py (MODIFIÉ)
+--------------------------------------------
+
+ref_livre = fields.Char(
+    string="Référence du livre",
+    required=True,
+    copy=False,
+    readonly=True,
+    default=lambda self: self.env['ir.sequence'].next_by_code('library.book') or 'New'
+)
+
+Explications :
+- string        : label affiché.
+- required=True : champ obligatoire.
+- copy=False    : non copié à la duplication.
+- readonly=True : non modifiable par l'utilisateur.
+- default=lambda self: ... : valeur calculée à la création.
+- lambda self:  : retarde l'exécution (nécessaire).
+- or 'New'      : fallback si la séquence est introuvable.
+
+3.3. Fichier __manifest__.py (MODIFIÉ)
+--------------------------------------
+
+Ajout dans 'data' :
+
+'data': [
+    'security/library_security.xml',
+    'security/ir.model.access.csv',
+    'views/library_book_view.xml',
+    'views/library_author_view.xml',
+    'views/library_category_view.xml',
+    'views/library_menu.xml',
+    'views/library_assets.xml',
+    'data/library_sequence.xml',       # ← AVANT les data
+    'data/library_author_data.xml',
+    'data/library_category_data.xml',
+    'data/library_book_data.xml',
+],
+
+Règle : les séquences AVANT les données qui les utilisent.
+
+3.4. Fichier views/library_book_view.xml (MODIFIÉ)
+--------------------------------------------------
+
+Ajout dans la vue FORM :
+
+    <field name="ref_livre"/>
+
+Ajout dans la vue TREE :
+
+    <field name="ref_livre"/>
+
+Ajout dans la vue KANBAN :
+
+    <div class="library_book_kanban_line">
+        <span class="library_book_kanban_label">Réf :</span>
+        <span class="library_book_kanban_value">
+            <field name="ref_livre"/>
+        </span>
+    </div>
+
+================================================================================
+4. ERREURS RENCONTRÉES ET SOLUTIONS
+================================================================================
+
+4.1. Erreur : pen_name vs pseudonym
+-----------------------------------
+
+Symptôme :
+    Invalid field 'pen_name' on model 'library.author'
+
+Cause : le fichier XML utilisait pen_name mais le modèle Python
+        avait été renommé en pseudonym.
+
+Solution :
+    - Remplacer pen_name par pseudonym dans tous les fichiers XML.
+    - Règle : cohérence entre le modèle et les fichiers de données.
+
+--------------------------------------------------------------------------------
+
+4.2. Erreur : column "ref_livre" does not exist
+-----------------------------------------------
+
+Symptôme :
+    ProgrammingError: column "ref_livre" does not exist
+
+Cause : le champ a été ajouté dans library_book.py mais la colonne
+        n'existe pas encore en base.
+
+Solution :
+    cd /d "C:\Program Files (x86)\Odoo 10.0\server" && odoo-bin.exe -c "C:\ODOO_10_DEV\odoo.conf" -d TESTPROJET -u library_app --stop-after-init --log-level=info
+
+Règle : ajouter un champ en Python ≠ créer la colonne en base.
+        Il faut METTRE À JOUR le module.
+
+--------------------------------------------------------------------------------
+
+4.3. Erreur : ref_livre = 'New' au lieu de LIV-000001
+-----------------------------------------------------
+
+Symptôme : tous les anciens livres affichent New.
+
+Cause :
+    - Les livres ont été créés AVANT l'ajout du champ.
+    - Le default ne s'applique PAS aux enregistrements existants.
+    - Le flag noupdate dans ir_model_data était t (true),
+      empêchant la mise à jour.
+
+Vérification :
+    SELECT name, noupdate
+    FROM ir_model_data
+    WHERE model = 'library.book' AND module = 'library_app'
+    ORDER BY name;
+
+Résultat observé : tous les records avaient noupdate = t.
+
+Solution :
+    UPDATE ir_model_data
+    SET noupdate = false
+    WHERE model = 'library.book' AND module = 'library_app';
+
+Puis mise à jour du module :
+    odoo-bin.exe -c "C:\ODOO_10_DEV\odoo.conf" -d TESTPROJET -u library_app --stop-after-init
+
+Règle : noupdate est un flag PAR ENREGISTREMENT, pas par fichier.
+        Changer <data noupdate="0"> dans le XML ne change pas
+        le flag en base. Il faut modifier ir_model_data.
+
+--------------------------------------------------------------------------------
+
+4.4. Erreur : Fichiers .pyc bloquants
+-------------------------------------
+
+Symptôme : les modifications d'un .py ne s'appliquent pas.
+
+Cause : Python 2.7 garde un cache .pyc qui peut être obsolète.
+
+Solution :
+    del /s /q C:\ODOO_10_DEV\custom-addons\library_app\*.pyc
+
+Puis relancer Odoo.
+
+Règle : supprimer les .pyc quand les modifications Python ne
+        s'appliquent pas.
+
+--------------------------------------------------------------------------------
+
+4.5. Erreur : Element odoo has extra content: data
+--------------------------------------------------
+
+Symptôme :
+    AssertionError: Element odoo has extra content: data, line 3
+
+Cause : présence de DEUX balises <data> dans le même fichier XML,
+        ou balise <data> DANS arch.
+
+Solution :
+    - Un seul <data> par fichier XML.
+    - Pas de <data> dans <field name="arch">.
+
+Règle : arch contient directement la vue (<kanban>, <form>,
+        <tree>, <search>).
+
+================================================================================
+5. RÉSULTAT FINAL
+================================================================================
+
+Après correction, les 17 livres ont bien leur référence :
+
+ id  | name                  | ref_livre
+-----+-----------------------+------------
+ 4   | Les Misérables        | LIV-000001
+ 5   | 1984                  | LIV-000002
+ 7   | Au-delà des rizières  | LIV-000003
+ 8   | Nour, 1947            | LIV-000004
+ ...
+
+================================================================================
+6. COMMANDES UTILES
+================================================================================
+
+6.1. Commandes SQL (psql)
+-------------------------
+
+-- Voir les séquences existantes
+SELECT id, name, code, prefix, number_next FROM ir_sequence;
+
+-- Voir les external IDs d'un modèle
+SELECT name, res_id, noupdate
+FROM ir_model_data
+WHERE model = 'library.book' AND module = 'library_app';
+
+-- Forcer la mise à jour des records
+UPDATE ir_model_data
+SET noupdate = false
+WHERE model = 'library.book' AND module = 'library_app';
+
+-- Voir la table en base
+SELECT id, name, ref_livre FROM library_book;
+
+6.2. Commandes ligne de commande (CMD)
+--------------------------------------
+
+-- Forcer la mise à jour d'un module
+cd /d "C:\Program Files (x86)\Odoo 10.0\server" && odoo-bin.exe -c "C:\ODOO_10_DEV\odoo.conf" -d TESTPROJET -u library_app --stop-after-init --log-level=info
+
+-- Supprimer les fichiers de cache Python
+del /s /q C:\ODOO_10_DEV\custom-addons\library_app\*.pyc
+
+================================================================================
+7. POINTS À RETENIR
+================================================================================
+
+1. ir.sequence est un modèle standard Odoo.
+2. noupdate="1" pour les séquences (sinon réinitialisation).
+3. default=lambda self: ... retarde l'exécution.
+4. or 'New' = fallback de sécurité.
+5. noupdate est un flag PAR ENREGISTREMENT dans ir_model_data.
+6. UPDATE ir_model_data SET noupdate = false = forcer la mise à jour.
+7. Toujours mettre à jour le module après ajout d'un champ.
+8. Vérifier en base : SELECT * FROM library_book;.
+
+================================================================================
+FIN DU DOCUMENT
+================================================================================
