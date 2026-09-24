@@ -149,6 +149,7 @@
                     <field name="ref_livre" />
                     <!-- les filtres -->
                     <!-- filtre selon l'états du libre -->
+
                     <!-- afficher seulemetn les livres en broullions -->
                     <filter name="filter_draft" string="Brouillons"
                         domain="[('state', '=', 'draft')]" />
@@ -158,12 +159,30 @@
                     <!-- afficher seulement les livres qui son empruntés -->
                     <filter name="filter_borrowed" string="Empruntés"
                         domain="[('state', '=', 'borrowed')]" />
+                    <separator />
+
                     <!-- afficher seulement les livres qui sont disponibles -->
                     <filter name="filter_available" string="Disponibles"
                         domain="[('available', '=', True)]" />
+                    <filter name="filter_unavailable" string="Indisponibles"
+                        domain="[('available', '=', False)]" />
+                    <separator />
                     <!-- n'affiche que le livres avec le reférence rechercher LIV-XXX-->
-                    <filter name="filter_ref_livre" string="Référence"
-                        domain="[('ref_livre', '!=', False)]" />
+                    <filter name="filter_no_ref" string="Sans référence"
+                        domain="[('ref_livre', '=', False)]" />
+
+                    <separator />
+                    <!-- FILTRE AVANCEE -->
+                    <!-- flitre pour avoir les libre plus de 500 pages -->
+                     <filter name="filter_more_500_pages" string="plus de 500 pages"
+                        domain="[('pages', '>', 500)]" />
+                        <!-- filtre pour les livre recent du 21ème siècles -->
+                    <filter name="filter_recent_21st_century" string="Récent (21ème siècle)"
+                        domain="[('publication_date', '>=', '2000-01-01')]" />
+                    <!-- filtre pour afficher les anciens livres -->
+                    <filter name="filter_old_books" string="Anciens livres"
+                        domain="[('publication_date', '&lt;', '2000-01-01')]" />
+
                     <!-- REGROUPEMENT   -->
 
                     <group expand="0" string="Grouper par">
