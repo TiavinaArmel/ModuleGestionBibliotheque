@@ -54,9 +54,11 @@ class LibraryBook(models.Model):
     publication_date = fields.Date(string="Date de publication")
 
     # Champ Booléen : disponible ou non.
-    available = fields.Boolean(
-        string="Disponible",
-        default=True
+    availability = fields.Selection(
+        selection=[
+            ('available', 'Disponible'),
+            ('unavailable','Non disponible')
+        ],string="Disponibilité",default='available', required=True
     )
 
     # Champ Selection : liste fermée de valeurs.
@@ -152,10 +154,11 @@ class LibraryBook(models.Model):
         """Marque le livre comme emprunté."""
         for book in self:
             book.state = 'borrowed'
-            book.available = False
+            book.availability = 'unavailable'
+
 
     def action_return(self):
         """Marque le livre comme retourné (disponible)."""
         for book in self:
             book.state = 'published'
-            book.available = True
+            book.availability = 'available'

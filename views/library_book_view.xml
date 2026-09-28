@@ -41,7 +41,7 @@
                             <group>
                                 <field name="pages" />
                                 <field name="publication_date" />
-                                <field name="available" />
+                                <field name="availability" />
                             </group>
                         </group>
                     </sheet>
@@ -149,7 +149,6 @@
                     <field name="ref_livre" />
                     <!-- les filtres -->
                     <!-- filtre selon l'états du libre -->
-
                     <!-- afficher seulemetn les livres en broullions -->
                     <filter name="filter_draft" string="Brouillons"
                         domain="[('state', '=', 'draft')]" />
@@ -163,9 +162,9 @@
 
                     <!-- afficher seulement les livres qui sont disponibles -->
                     <filter name="filter_available" string="Disponibles"
-                        domain="[('available', '=', True)]" />
+                        domain="[('availability', '=', 'available')]" />
                     <filter name="filter_unavailable" string="Indisponibles"
-                        domain="[('available', '=', False)]" />
+                        domain="[('availability', '=', 'unavailable')]" />
                     <separator />
                     <!-- n'affiche que le livres avec le reférence rechercher LIV-XXX-->
                     <filter name="filter_no_ref" string="Sans référence"
@@ -174,9 +173,9 @@
                     <separator />
                     <!-- FILTRE AVANCEE -->
                     <!-- flitre pour avoir les libre plus de 500 pages -->
-                     <filter name="filter_more_500_pages" string="plus de 500 pages"
+                    <filter name="filter_more_500_pages" string="plus de 500 pages"
                         domain="[('pages', '>', 500)]" />
-                        <!-- filtre pour les livre recent du 21ème siècles -->
+                    <!-- filtre pour les livre recent du 21ème siècles -->
                     <filter name="filter_recent_21st_century" string="Récent (21ème siècle)"
                         domain="[('publication_date', '>=', '2000-01-01')]" />
                     <!-- filtre pour afficher les anciens livres -->
@@ -186,7 +185,7 @@
                     <!-- REGROUPEMENT   -->
 
                     <group expand="0" string="Grouper par">
-                        <!-- Grouper les données  selon leur était chacun (disponible, emprunté,
+                        <!-- Grouper les données  selon leur état chacun (disponible, emprunté,
                         etc.) -->
                         <filter name="group_by_state" string="État"
                             context="{'group_by': 'state'}" />
@@ -196,6 +195,10 @@
                         <!-- Grouper les données  selon leur catégorie -->
                         <filter name="group_by_category" string="Catégorie"
                             context="{'group_by': 'category_id'}" />
+                        <!-- groupement par disponibilité -->
+
+                        <filter name="group_by_availability" string="Disponibilité"
+                            context="{'group_by': 'availability'}" />
                     </group>
                 </search>
             </field>

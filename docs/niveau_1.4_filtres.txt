@@ -1,0 +1,475 @@
+================================================================================
+NIVEAU 1.4 — LES FILTRES AVANCÉS (VUE SEARCH)
+================================================================================
+
+Date         : 2026-09-28
+Module       : library_app
+Version Odoo : 10.0 Community
+Base de données : TESTPROJET
+Auteur       : Tiavina Armel
+
+================================================================================
+1. OBJECTIF
+================================================================================
+
+Enrichir la vue SEARCH de library.book avec des FILTRES AVANCÉS et
+des GROUPES pour permettre à l'utilisateur de :
+    - Filtrer rapidement par état, disponibilité, taille, date.
+    - Grouper les livres par état, auteur, catégorie, année.
+    - Chercher efficacement dans la liste.
+
+================================================================================
+2. CONCEPTS CLÉS
+================================================================================
+
+2.1. Vue search, c'est quoi ?
+-----------------------------
+
+La vue search est la vue qui apparaît EN HAUT de toute liste (tree)
+ou kanban. Elle contient :
+
+    - Une BARRE DE RECHERCHE (🔍).
+    - Un menu FILTRES.
+    - Un menu GROUPER PAR.
+    - Un menu FAVORIS (ajouté automatiquement par Odoo).
+
+2.2. Les 3 éléments d'une vue search
+------------------------------------
+
+ÉLÉMENT 1 — CHAMPS CHERCHABLES (<field>)
+    Rend un champ utilisable dans la barre de recherche.
+    Exemple : <field name="author_id"/>
+    → l'utilisateur peut taper un nom d'auteur pour filtrer.
+
+ÉLÉMENT 2 — FILTRES (<filter>)
+    Boutons pré-définis dans le menu Filtres.
+    Chaque filtre applique un DOMAINE (condition de filtrage).
+
+ÉLÉMENT 3 — GROUPES (<group>)
+    Boutons dans le menu Grouper par.
+    Chaque groupe utilise un CONTEXTE {'group_by': 'champ'}.
+
+2.3. Analogie — Le tri de cartes
+--------------------------------
+
+Imagine une boîte de cartes postales :
+
+    - La BARRE DE RECHERCHE = chercher une carte par mot-clé.
+    - Les FILTRES = montrer uniquement les cartes d'un pays.
+    - Les GROUPES = ranger les cartes par continent.
+
+La vue search, c'est ça : chercher, filtrer, ranger.
+
+================================================================================
+3. VOCABULAIRE À RETENIR
+================================================================================
+
++--------------------------+---------------------------------------------------+
+| Terme                    | Signification                                     |
++--------------------------+---------------------------------------------------+
+| Vue search               | Vue de recherche (barre + filtres + groupes).     |
+| <search>                 | Balise racine de la vue search.                   |
+| <field> (dans search)    | Rend un champ cherchable.                         |
+| <filter>                 | Bouton pré-défini dans Filtres ou Grouper par.    |
+| <group> (dans search)    | Conteneur de groupes.                             |
+| <separator/>             | Ligne de séparation visuelle dans Filtres.        |
+| Domaine                  | Condition de filtrage (liste de tuples).          |
+| Contexte                 | Informations passées à la vue (group_by).         |
+| group_by                 | Directive pour grouper.                           |
+| expand="0"               | Menu Grouper par replié par défaut.               |
++--------------------------+---------------------------------------------------+
+
+================================================================================
+4. SYNTAXE GÉNÉRALE
+================================================================================
+
+<record id="view_xxx_search" model="ir.ui.view">
+    <field name="name">xxx.search</field>
+    <field name="model">nom.modele</field>
+    <field name="arch" type="xml">
+        <search>
+
+            <!-- 1. Champs cherchables -->
+            <field name="champ1"/>
+            <field name="champ2"/>
+
+            <!-- 2. Filtres -->
+            <filter name="filtre_x" string="Label"
+                    domain="[('champ', 'op', valeur)]"/>
+
+            <!-- 3. Séparateur -->
+            <separator/>
+
+            <!-- 4. Autres filtres -->
+            <filter name="filtre_y" string="Autre"
+                    domain="[...]"/>
+
+            <!-- 5. Groupes -->
+            <group expand="0" string="Grouper par">
+                <filter name="group_by_x" string="Label"
+                        context="{'group_by': 'champ'}"/>
+            </group>
+
+        </search>
+    </field>
+</record>
+
+================================================================================
+5. DÉCOMPOSITION D'UN <filter>
+================================================================================
+
+<filter name="filter_published"
+        string="Publiés"
+        domain="[('state', '=', 'published')]"
+        help="Afficher uniquement les livres publiés"/>
+
++-------------+---------------------------------------+----------------+
+| Attribut    | Rôle                                  | Obligatoire ?  |
++-------------+---------------------------------------+----------------+
+| name        | Nom technique unique                  | OUI            |
+| string      | Label affiché                         | OUI            |
+| domain      | Condition de filtrage                 | OUI (filtre)   |
+| context     | Contexte (group_by)                   | OUI (groupe)   |
+| help        | Info-bulle                            | NON            |
++-------------+---------------------------------------+----------------+
+
+================================================================================
+6. LES OPÉRATEURS DE DOMAINE
+================================================================================
+
++------------+-------------------------------+-------------------------------------+
+| Opérateur  | Signification                 | Exemple                             |
++------------+-------------------------------+-------------------------------------+
+| =          | Égal à                        | [('state', '=', 'draft')]           |
+| !=         | Différent de                  | [('state', '!=', 'draft')]          |
+| >          | Supérieur à                   | [('pages', '>', 500)]               |
+| <          | Inférieur à                   | [('pages', '<', 100)]               |
+| >=         | Supérieur ou égal             | [('pages', '>=', 500)]              |
+| <=         | Inférieur ou égal             | [('pages', '<=', 100)]              |
+| in         | Dans une liste                | [('state', 'in', ['draft','pub'])]  |
+| not in     | Pas dans une liste            | [('state', 'not in', ['draft'])]    |
+| like       | Contient (sensible casse)     | [('name', 'like', 'Hugo')]          |
+| ilike      | Contient (insensible casse)   | [('name', 'ilike', 'hugo')]         |
+| =like      | Correspond au motif           | [('isbn', '=like', '978%')]         |
+| child_of   | Descendant de                 | [('category_id', 'child_of', 5)]    |
++------------+-------------------------------+-------------------------------------+
+
+================================================================================
+7. LES FILTRES DE NOTRE MODULE
+================================================================================
+
++---------------------+------------------------------------------+----------------------+
+| Filtre              | Domaine                                  | Ce qu'il affiche     |
++---------------------+------------------------------------------+----------------------+
+| Brouillons          | [('state', '=', 'draft')]                | Livres en brouillon  |
+| Publiés             | [('state', '=', 'published')]            | Livres publiés       |
+| Empruntés           | [('state', '=', 'borrowed')]             | Livres empruntés     |
+| Disponibles         | [('available', '=', True)]               | Livres disponibles   |
+| Non disponibles     | [('available', '=', False)]              | Livres indisponibles |
+| Plus de 500 pages   | [('pages', '>', 500)]                    | Livres volumineux    |
+| Livres récents      | [('publication_date', '>', '2000-01-01')]| Livres du 21e siècle |
+| Mes livres          | [('create_uid', '=', uid)]               | Livres de l'utilis.  |
++---------------------+------------------------------------------+----------------------+
+
+================================================================================
+8. LES GROUPES DE NOTRE MODULE
+================================================================================
+
++---------------------+-----------------------------------------+--------------------------+
+| Groupe              | Contexte                                | Ce qu'il fait            |
++---------------------+-----------------------------------------+--------------------------+
+| État                | {'group_by': 'state'}                   | Groupe par état          |
+| Auteur              | {'group_by': 'author_id'}               | Groupe par auteur        |
+| Catégorie           | {'group_by': 'category_id'}             | Groupe par catégorie     |
+| Disponibilité       | {'group_by': 'availability'}            | Groupe par disponibilité |
+| Année               | {'group_by': 'publication_date:year'}   | Groupe par année         |
++---------------------+-----------------------------------------+--------------------------+
+
+================================================================================
+9. LES VARIABLES DISPONIBLES DANS UN DOMAINE
+================================================================================
+
++--------------+----------------------------------------------+
+| Variable     | Sens                                         |
++--------------+----------------------------------------------+
+| uid          | ID de l'utilisateur connecté                 |
+| user         | Objet res.users de l'utilisateur connecté    |
+| company_id   | ID de la société active                      |
++--------------+----------------------------------------------+
+
+Exemple : [('create_uid', '=', uid)]
+→ Filtre les enregistrements créés par l'utilisateur connecté.
+
+================================================================================
+10. LES DOMAINES COMPOSÉS
+================================================================================
+
+10.1. ET logique (par défaut)
+-----------------------------
+
+[('state', '=', 'published'), ('available', '=', True)]
+
+Traduction : "publiés ET disponibles".
+
+10.2. OU logique (opérateur |)
+------------------------------
+
+['|', ('state', '=', 'draft'), ('state', '=', 'published')]
+
+Traduction : "brouillons OU publiés".
+
+10.3. Règle des opérateurs
+--------------------------
+
+L'OPÉRATEUR est TOUJOURS en PREMIER, suivi des opérandes.
+
+Exemples :
+    ET : ['&', cond1, cond2] (souvent implicite)
+    OU : ['|', cond1, cond2]
+    Combinaison : ['|', cond1, '&', cond2, cond3]
+
+================================================================================
+11. LE RÉSULTAT VISUEL DANS L'UI
+================================================================================
+
+11.1. Barre de recherche (en haut)
+----------------------------------
+
++---------------------------------------------------------------------+
+| [🔍 Rechercher...   ] [Filtres ▼] [Grouper par ▼] [Favoris ▼]      |
++---------------------------------------------------------------------+
+
+11.2. Menu Filtres ouvert
+-------------------------
+
+▼ Filtres
+    ☐ Brouillons
+    ☐ Publiés
+    ☐ Empruntés
+    ─────────────      ← separator
+    ☐ Disponibles
+    ☐ Non disponibles
+    ─────────────
+    ☐ Plus de 500 pages
+    ☐ Livres récents
+    ─────────────
+    ☐ Mes livres
+
+11.3. Menu Grouper par ouvert
+-----------------------------
+
+▼ Grouper par
+    ☐ État
+    ☐ Auteur
+    ☐ Catégorie
+    ☐ Disponibilité
+    ☐ Année
+
+11.4. Résultat après filtrage
+-----------------------------
+
++----------------------------------------------+
+| ● Publiés ×                                  |  ← filtre actif
++----------------------------------------------+
+| Référence  Titre              Auteur  État   |
++----------------------------------------------+
+| LIV-000001 Les Misérables     Hugo    Publié |
+| LIV-000002 1984               Orwell  Publié |
++----------------------------------------------+
+
+11.5. Résultat après groupement
+-------------------------------
+
++----------------------------------------------+
+| ▼ État : Publié (12 livres)                  |
+|   LIV-000001  Les Misérables    Hugo         |
+|   LIV-000002  1984              Orwell       |
+|                                              |
+| ▼ État : Brouillon (3 livres)                |
+|   LIV-000015  Ny Bokiko 2       Rakotoanosy  |
++----------------------------------------------+
+
+================================================================================
+12. ERREURS RENCONTRÉES ET SOLUTIONS
+================================================================================
+
+12.1. Erreur : KeyError: u'available'
+-------------------------------------
+
+Symptôme :
+    KeyError: u'available' lors d'un group_by sur available.
+
+Cause : le champ 'available' n'existe plus dans le modèle Python
+        (renommé ou supprimé), mais la vue search le référence encore.
+
+Solution :
+    1. Vérifier que le champ existe dans library_book.py.
+    2. Si renommé, remplacer TOUTES les occurrences dans la vue search.
+    3. Redémarrer Odoo + mettre à jour le module.
+
+Règle : tout champ référencé dans une vue DOIT exister dans le modèle.
+
+--------------------------------------------------------------------------------
+
+12.2. Erreur : group_by affiche 'true' et 'indéfini'
+----------------------------------------------------
+
+Symptôme : lors d'un group_by sur un champ Boolean, Odoo affiche
+           'true' et 'indéfini' au lieu de labels clairs.
+
+Cause : comportement par défaut d'Odoo pour les champs Boolean.
+
+Solution :
+    Remplacer le champ Boolean par un Selection avec des labels.
+
+    AVANT :
+        available = fields.Boolean(string="Disponible")
+
+    APRÈS :
+        availability = fields.Selection([
+            ('available', 'Disponible'),
+            ('unavailable', 'Non disponible'),
+        ], string="Disponibilité", default='available')
+
+    Adapter ensuite :
+        - Les vues (field name).
+        - Les filtres (domain).
+        - Les méthodes (attributions).
+
+Règle : pour un affichage clair et évolutif, préférer un Selection.
+
+--------------------------------------------------------------------------------
+
+12.3. Erreur : Un filtre n'apparaît pas
+---------------------------------------
+
+Symptôme : le filtre existe dans le XML mais n'apparaît pas dans l'UI.
+
+Causes possibles :
+    - Le nom (name) du filtre est DUPLIQUÉ.
+    - Le domain est MAL FORMÉ.
+    - Le string est VIDE.
+    - Le cache navigateur n'est pas vidé.
+
+Solution :
+    1. Vérifier l'unicité des noms.
+    2. Vérifier la syntaxe des domaines.
+    3. Remplir le string.
+    4. Faire Ctrl+Shift+R dans le navigateur.
+
+--------------------------------------------------------------------------------
+
+12.4. Erreur : La virgule manquante dans un domaine
+---------------------------------------------------
+
+Symptôme : erreur de parsing XML.
+
+Cause : deux conditions collées sans virgule.
+
+    [('state', '=', 'published') ('available', '=', True)]  -- FAUX
+
+Solution :
+    [('state', '=', 'published'), ('available', '=', True)] -- CORRECT
+
+Règle : chaque tuple dans un domaine est séparé par une virgule.
+
+================================================================================
+13. COMMANDES UTILES
+================================================================================
+
+13.1. Chercher un mot dans les fichiers
+---------------------------------------
+
+findstr /s "available" C:\ODOO_10_DEV\custom-addons\library_app\*.py
+findstr /s "available" C:\ODOO_10_DEV\custom-addons\library_app\*.xml
+
+13.2. Voir la structure d'une table
+-----------------------------------
+
+\d library_book
+
+13.3. Voir les colonnes d'une table
+-----------------------------------
+
+SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_name = 'library_book'
+ORDER BY ordinal_position;
+
+13.4. Redémarrer Odoo
+---------------------
+
+Ctrl+C dans le terminal Odoo
+start_odoo.bat
+
+13.5. Forcer la mise à jour du module
+-------------------------------------
+
+cd /d "C:\Program Files (x86)\Odoo 10.0\server" && odoo-bin.exe -c "C:\ODOO_10_DEV\odoo.conf" -d TESTPROJET -u library_app --stop-after-init --log-level=info
+
+13.6. Vider le cache navigateur
+-------------------------------
+
+Ctrl+Shift+R
+
+================================================================================
+14. BONNES PRATIQUES
+================================================================================
+
+1. Nommer les filtres avec un préfixe : filter_xxx, group_by_xxx.
+
+2. Utiliser <separator/> pour grouper visuellement les filtres.
+
+3. Ordonner les filtres du plus courant au plus rare.
+
+4. Tester chaque filtre individuellement.
+
+5. Documenter avec des commentaires XML.
+
+6. Ne jamais utiliser un champ inexistant dans un domaine.
+
+7. Préférer un Selection à un Boolean pour un affichage clair.
+
+8. Vérifier l'unicité des noms de filtres.
+
+9. Toujours redémarrer Odoo après modification d'un .py.
+
+10. Ctrl+Shift+R après modification d'un .xml.
+
+================================================================================
+15. POINTS À RETENIR
+================================================================================
+
+1. Vue search = champs + filtres + groupes.
+
+2. <filter> = bouton pré-défini dans le menu Filtres.
+
+3. domain = condition (liste de tuples).
+
+4. context = pour les groupes (group_by).
+
+5. <separator/> = séparateur visuel.
+
+6. uid = utilisateur connecté.
+
+7. Opérateurs : =, !=, >, <, in, like, ilike.
+
+8. ET par défaut, OU avec |.
+
+9. Modifier un XML = pas de redémarrage Odoo.
+
+10. Toujours tester après modification.
+
+11. Boolean groupé affiche 'true' et 'indéfini'.
+
+12. Selection groupé affiche les labels clairs.
+
+13. Tout champ référencé dans une vue DOIT exister dans le modèle.
+
+14. Cohérence modèle / vue / base = pas d'erreur.
+
+15. Documenter chaque filtre et chaque groupe.
+
+================================================================================
+FIN DU DOCUMENT
+================================================================================
