@@ -23,8 +23,8 @@ class LibraryBook(models.Model):
     # CHAMPS SIMPLES
     # ------------------------------------------------------------------
 
-# Champ de référence unique du livre (ex: LIV-0001).
-# Ce champ est rempli automatiquement à la création via la séquence Odoo.
+    # Champ de référence unique du livre (ex: LIV-0001).
+    # Ce champ est rempli automatiquement à la création via la séquence Odoo.
     ref_livre = fields.Char(
     string="Référence du livre",        # Libellé affiché dans l'interface.
     required=True,                       # Champ obligatoire : ne peut pas être vide.
@@ -142,12 +142,14 @@ class LibraryBook(models.Model):
     # commencent par "action_". Cela les rend faciles à repérer.
     def action_publish(self):
         """Passe le livre de l'état 'draft' à 'published'."""
-        for book in self:
+        for book in self:   
             book.state = 'published'
 
     def action_draft(self):
         """Remet le livre en brouillon."""
         for book in self:
+            if book.state == 'borrowed':
+                raise ValidationError("Impossible de remettre un livre emprunté en brouillon.")                
             book.state = 'draft'
 
     def action_borrow(self):

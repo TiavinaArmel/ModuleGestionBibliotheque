@@ -13,18 +13,37 @@
 
                     <!-- Barre de boutons + état -->
                     <header>
-                        <button name="action_publish" type="object"
-                            string="Publier" class="oe_highlight"
-                            states="draft" />
-                        <button name="action_borrow" type="object"
+                        <button name="action_publish"
+                            type="object"
+                            icon="fa-check"
+                            string="Publier"
+                            class="oe_highlight"
+                            states="draft"
+                            confirm="Êtes-vous sûr de vouloir publier ce livre ?"
+                        />
+                        <!-- Emprunter : passe le livre en état "emprunté" et "indisponible". -->
+                        <button name="action_borrow"
+                            type="object"
+                            icon="fa-book"
                             string="Emprunter"
-                            states="published" />
+                            states="published"
+                            confirm="Êtes-vous sûr de vouloir emprunter ce livre ?"
+                        />
+                        <!-- retounéée une livre passe le livre en disponible et en états publié -->
                         <button name="action_return" type="object"
                             string="Retourner"
-                            states="borrowed" />
+                            icon="fa-undo"
+                            states="borrowed"
+                            confirm="Êtes-vous sûr de vouloir retourner ce livre ?"
+                        />
+                        <!-- seulement les livres publier peuvent revenir on brouillon 
+                         et passe en unavaible -->
                         <button name="action_draft" type="object"
                             string="Remettre en brouillon"
-                            states="published,borrowed" />
+                            icon="fa-times"
+                            states="published"
+                            confirm="Êtes-vous sûr de vouloir remettre ce livre en brouillon ?"
+                        />
                         <field name="state" widget="statusbar" />
                     </header>
 
@@ -66,6 +85,26 @@
                     <field name="category_id" />
                     <field name="pages" />
                     <field name="state" />
+
+                    <button name="action_publish"
+                        type="object"
+                        icon="fa-check"
+                        string="Publier"
+                        class="oe_highlight"
+                        states="draft"
+                        confirm="Êtes-vous sûr de vouloir publier ce livre ?" />
+                    <button name="action_borrow"
+                        type="object"
+                        icon="fa-book"
+                        string="Emprunter"
+                        states="published"
+                        confirm="Êtes-vous sûr de vouloir emprunter ce livre ?" />
+                    <button name="action_return"
+                        type="object"
+                        icon="fa-undo"
+                        string="Retourner"
+                        states="borrowed"
+                        confirm="Êtes-vous sûr de vouloir retourner ce livre ?" />
                 </tree>
             </field>
         </record>
